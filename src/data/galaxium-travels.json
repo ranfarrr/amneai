@@ -1,0 +1,101 @@
+{
+    "metadata": {
+        "repoName": "Galaxium Travels",
+        "repoUrl": "https://github.com/IBM/galaxium-travels",
+        "analyzedAt": "2026-05-16T08:54:46.141Z",
+        "language": "Python/TypeScript",
+        "framework": "FastAPI + React"
+    },
+    "summary": "Full-stack interplanetary flight booking system with a React/TypeScript frontend, FastAPI backend supporting both REST and MCP protocols, and SQLite database. Features three seat classes (Economy, Business, Galaxium) with independent availability tracking and dynamic pricing.",
+    "architecture": {
+        "frontend": {
+            "React App (src/App.tsx)": "Main application entry with routing, user context provider, and layout wrapper",
+            "Pages (src/pages/)": "Home, Flights browsing with filters, and MyBookings management views",
+            "Components (src/components/)": "Reusable UI components organized by domain (bookings, flights, layout, user, common)",
+            "API Service (src/services/api.ts)": "Axios-based HTTP client with interceptors, type-safe endpoints, and error handling",
+            "Types (src/types/)": "TypeScript definitions for Flight, Booking, User, Quote, Hold, and error responses"
+        },
+        "backend": {
+            "FastAPI Server (server.py)": "Dual-protocol server with REST endpoints and MCP tools, lifespan management for DB init and seeding",
+            "Service Layer (services/)": "Business logic for booking, flight, and user operations returning Union[Success, ErrorResponse]",
+            "Database Models (models.py)": "SQLAlchemy ORM models for User, Flight, Booking with seat class columns and status enum",
+            "Database Setup (db.py)": "SessionLocal factory, engine configuration, defaults to SQLite when DATABASE_URL unset",
+            "Seed Data (seed.py)": "Demo data generator creating 10 users, 10 flights, 20 bookings across all seat classes"
+        }
+    },
+    "dataFlow": [
+        "User browses flights via React frontend calling GET /flights with optional filters",
+        "Frontend displays flights with real-time seat availability per class (economy/business/galaxium)",
+        "User registers or logs in via POST /register or GET /user (name + email authentication)",
+        "User selects flight and seat class, frontend calls POST /book with user_id, name, flight_id, seat_class",
+        "Backend validates user name matches user_id, checks seat availability for specific class, calculates price (base_price * multiplier)",
+        "Service decrements correct seat class counter (economy_seats_available, business_seats_available, or galaxium_seats_available)",
+        "Booking created with status=booked, price_paid stored, booking returned to frontend",
+        "User can view bookings via GET /bookings/{user_id} or cancel via POST /cancel/{booking_id}",
+        "Cancellation increments seat counter for the correct class and updates booking status to cancelled",
+        "MCP tools provide same functionality for AI agents, manually managing DB sessions outside FastAPI DI"
+    ],
+    "keyFiles": [
+        {
+            "file": "AGENTS.md",
+            "reason": "Critical non-obvious patterns that break if ignored: MCP server creation order, SessionLocal patching in tests, name verification requirement, SQLite as production DB, Union return types instead of exceptions"
+        },
+        {
+            "file": "booking_system_backend/server.py",
+            "reason": "Main backend entry point showing dual-protocol architecture (REST + MCP), lifespan management combining MCP and FastAPI, Java service proxy endpoints, and all API routes"
+        },
+        {
+            "file": "booking_system_backend/services/booking.py",
+            "reason": "Core booking logic with seat class validation, price calculation using multipliers (1x/2.5x/5x), independent seat counter management, and Union[Success, ErrorResponse] pattern"
+        },
+        {
+            "file": "booking_system_frontend/src/services/api.ts",
+            "reason": "Complete API client with all endpoints, FlightFilters interface supporting multiple filter styles, error handling via interceptors, and Java hold service integration"
+        },
+        {
+            "file": "booking_system_backend/models.py",
+            "reason": "Database schema showing three separate seat availability columns per flight, seat_class and price_paid on bookings, and BookingStatus enum with both spellings"
+        }
+    ],
+    "entryPoints": {
+        "add_feature": "Start in booking_system_backend/services/ for backend logic (returns Union types), add REST endpoint in server.py, create TypeScript types in frontend/src/types/, add API call in frontend/src/services/api.ts, build UI in frontend/src/components/ or pages/",
+        "fix_bug": "Check AGENTS.md for non-obvious patterns first. Backend bugs: examine service layer (services/), verify Union return handling, check seat class logic. Frontend bugs: check api.ts error handling (success: false field), verify component state management, inspect browser console for API errors",
+        "change_styling": "Modify booking_system_frontend/tailwind.config.js for theme colors (cosmic-purple, nebula-pink, etc), edit component CSS in src/components/, adjust global styles in src/index.css, use Tailwind utility classes in TSX files"
+    },
+    "gotchas": [
+        "MCP server MUST be created before FastAPI app (line 16 in server.py) or lifespan combination fails",
+        "Service functions return Union[SuccessModel, ErrorResponse] not exceptions - always check isinstance(result, ErrorResponse)",
+        "book_flight() validates BOTH user_id AND name match - non-standard security pattern that will fail if name is wrong",
+        "Tests must monkeypatch BOTH db.SessionLocal AND server.SessionLocal (conftest.py lines 49-50) or MCP tools use wrong session",
+        "SQLite is the production database - DATABASE_URL intentionally unset in ECS so db.py defaults to SQLite, data is ephemeral",
+        "Frontend checks success: false field not HTTP status codes - error responses return 200 with ErrorResponse body",
+        "Each seat class has independent availability counters - must decrement/increment correct field (economy_seats_available, business_seats_available, galaxium_seats_available)",
+        "Price multipliers are hardcoded in booking.py - economy 1.0x, business 2.5x, galaxium 5.0x applied to base_price"
+    ],
+    "dependencies": {
+        "external_services": [
+            "Java Inventory Hold Service (optional, proxied via Python backend at /quotes, /holds endpoints)"
+        ],
+        "npm_packages": {
+            "react": "^19.2.0 - UI library",
+            "react-router-dom": "^7.12.0 - Client-side routing",
+            "axios": "^1.13.2 - HTTP client with interceptors",
+            "tailwindcss": "^3.4.19 - Utility-first CSS framework",
+            "framer-motion": "^12.26.1 - Animation library for starfield and transitions",
+            "react-hot-toast": "^2.6.0 - Toast notifications",
+            "lucide-react": "^0.562.0 - Icon library",
+            "date-fns": "^4.1.0 - Date formatting utilities",
+            "vite": "^7.2.4 - Build tool and dev server"
+        },
+        "runtime_requirements": [
+            "Python 3.8+ with pip",
+            "Node.js 18+ with npm",
+            "SQLite (bundled with Python)",
+            "Port 8001 for backend (configurable)",
+            "Port 5173 for frontend dev server (configurable)",
+            "Environment variable VITE_API_URL for frontend API base URL",
+            "Environment variable SEED_DEMO_DATA=true to populate demo data on startup",
+            "Environment variable CORS_ORIGINS for allowed origins (defaults to *)"
+        ]
+    }
+}

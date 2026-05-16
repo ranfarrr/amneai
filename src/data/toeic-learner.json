@@ -1,0 +1,89 @@
+{
+    "metadata": {
+        "repoName": "Interactive TOEIC Learner",
+        "repoUrl": "https://github.com/ranfarrr/interactive-toeic-learner",
+        "analyzedAt": "2026-05-16T08:34:39.442Z",
+        "language": "JavaScript",
+        "framework": "React 18"
+    },
+    "summary": "A progressive 3-phase interactive learning platform for TOEIC test preparation, featuring vocabulary flashcards, paraphrase matching exercises, and logical deduction challenges using business English contexts.",
+    "architecture": {
+        "frontend": {
+            "App.jsx": "Main orchestrator managing phase transitions (1\u21922\u21923) and rendering current learning module",
+            "FlashcardModule.jsx": "Phase 1 - 3D flip cards for vocabulary acquisition with spaced repetition feedback",
+            "ParaphraseMatcher.jsx": "Phase 2 - Interactive matching game for paraphrase recognition with accuracy tracking",
+            "TriangulationEngine.jsx": "Phase 3 - Clue-based logical reasoning engine requiring evidence collection before question unlock",
+            "content.json": "Centralized data store for scenarios, questions, options, and feedback"
+        },
+        "backend": {
+            "component": "No backend - fully client-side React application"
+        }
+    },
+    "dataFlow": [
+        "User starts at Phase 1 (FlashcardModule) with vocabulary cards",
+        "User flips cards to reveal definitions and business contexts",
+        "User rates mastery level (Lexical Deficit/Grammar Error/Mastered)",
+        "Upon completion, onComplete callback triggers phase transition to Phase 2",
+        "Phase 2 (ParaphraseMatcher) loads shuffled paraphrase pairs",
+        "User clicks source and target phrases to match equivalent meanings",
+        "Correct matches are locked; incorrect matches shake and reset",
+        "Upon 100% completion, modal displays accuracy stats and unlocks Phase 3",
+        "Phase 3 (TriangulationEngine) loads scenarios from content.json",
+        "User clicks sentences to identify clues (non-clues trigger shake animation)",
+        "When all clues found, question section unlocks with blur removal",
+        "User selects answer and submits for validation with feedback",
+        "Correct answer enables Next Scenario button to progress"
+    ],
+    "keyFiles": [
+        {
+            "file": "src/App.jsx",
+            "reason": "Entry point orchestrating all 3 phases with state management for phase transitions. Start here to understand application flow."
+        },
+        {
+            "file": "src/FlashcardModule.jsx",
+            "reason": "Phase 1 implementation with 3D CSS transforms, hardcoded flashcard data, and spaced repetition UI. Modify to add new vocabulary cards."
+        },
+        {
+            "file": "src/ParaphraseMatcher.jsx",
+            "reason": "Phase 2 matching game with shuffle logic, match verification, and completion modal. Contains hardcoded paraphrase pairs for modification."
+        },
+        {
+            "file": "src/components/TriangulationEngine.jsx",
+            "reason": "Phase 3 logical reasoning engine consuming content.json. Core deduction mechanic with clue discovery and question unlocking."
+        },
+        {
+            "file": "src/data/content.json",
+            "reason": "Centralized data source for Phase 3 scenarios. Add new scenarios here without touching component code. Schema: scenarios array with text/clues/questions/options."
+        }
+    ],
+    "entryPoints": {
+        "add_feature": "Start in src/App.jsx to add new phases or modify phase flow. For new learning modules, create component in src/ and import into App.jsx with phase condition.",
+        "fix_bug": "Check browser console for errors. Phase 1-2 bugs likely in respective module files. Phase 3 bugs check TriangulationEngine.jsx and content.json schema validation.",
+        "change_styling": "Global styles in src/index.css (Tailwind base). Component-specific styles use Tailwind utility classes inline. Color scheme: #003366 (primary blue), #e78218 (accent orange)."
+    },
+    "gotchas": [
+        "FlashcardModule and ParaphraseMatcher have HARDCODED data arrays - not scalable. Consider moving to JSON files like Phase 3.",
+        "Phase transitions use onComplete callbacks - no routing/navigation. Adding browser back button support requires React Router implementation.",
+        "TriangulationEngine expects specific JSON schema (isClue boolean, isCorrect boolean). Breaking schema causes runtime errors with no validation.",
+        "CSS animations (flip, shake) use custom Tailwind classes that may need postcss.config.js configuration. Check if animate-shake is defined.",
+        "No state persistence - refreshing browser resets to Phase 1. Consider localStorage or backend integration for progress tracking."
+    ],
+    "dependencies": {
+        "external_services": [],
+        "npm_packages": {
+            "react": "^18.2.0 - Core UI library",
+            "react-dom": "^18.2.0 - React DOM renderer",
+            "lucide-react": "^0.300.0 - Icon library (imported but usage not visible in analyzed files)",
+            "vite": "^4.4.5 - Build tool and dev server",
+            "tailwindcss": "^3.3.5 - Utility-first CSS framework",
+            "autoprefixer": "^10.4.16 - PostCSS plugin for vendor prefixes",
+            "postcss": "^8.4.31 - CSS transformation tool"
+        },
+        "runtime_requirements": [
+            "Node.js (version not specified, recommend 16+)",
+            "npm or yarn package manager",
+            "Modern browser with ES6+ support",
+            "Browser with CSS transform-style: preserve-3d support for 3D flip cards"
+        ]
+    }
+}

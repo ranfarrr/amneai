@@ -1,0 +1,94 @@
+{
+  "metadata": {
+    "repoName": "APIlot",
+    "repoUrl": "https://github.com/ranfarrr/APIlot-Inteligent-API-Navigator",
+    "analyzedAt": "2026-05-16T08:00:00Z",
+    "language": "JavaScript",
+    "framework": "React + Vite"
+  },
+  "summary": "APIlot is an AI-powered API documentation navigator that transforms static API docs into interactive, usable forms. Users paste an API documentation URL, and the app scrapes it, processes it through an AI model (GPT-OSS-20B), and generates dynamic form fields with a live HTTP request preview terminal—all within 2 minutes.",
+  "architecture": {
+    "frontend": {
+      "App.jsx": "Main orchestrator managing global state (baseUrl, endpoints, selectedIndex, payload), handling the scan workflow, error handling, and JSON repair logic",
+      "ApiScannerInput": "URL input component with loading states and error display",
+      "EndpointSelector": "Collapsible list showing all discovered API endpoints with method badges (GET/POST/etc.)",
+      "DynamicFormBuilder": "Renders form fields dynamically based on endpoint schema (headers, path params, query params, body fields)",
+      "LivePayloadTerminal": "Real-time HTTP request preview with syntax highlighting, showing the complete request that would be sent",
+      "Header": "Navigation/branding component"
+    },
+    "backend": {
+      "n8n_webhook": "Orchestrates the scraping and AI processing workflow (not in this repo)",
+      "firecrawl": "Web scraping service that extracts API documentation content",
+      "vLLM_GPT-OSS-20B": "AI model running on AMD MI300X GPU that parses docs into structured JSON"
+    }
+  },
+  "dataFlow": [
+    "User pastes API documentation URL into ApiScannerInput component",
+    "App.jsx sends POST request to n8n webhook (VITE_N8N_WEBHOOK_URL) with the URL",
+    "n8n triggers Firecrawl to scrape the documentation page",
+    "Scraped content is fed to GPT-OSS-20B model via vLLM for parsing",
+    "AI returns structured JSON with baseUrl and endpoints array (each endpoint has method, path, name, headers, pathParams, queryParams, bodyFields)",
+    "App.jsx receives response, handles JSON repair if needed (using jsonrepair library), and extracts endpoints",
+    "EndpointSelector displays all endpoints; user selects one",
+    "DynamicFormBuilder renders form fields based on selected endpoint's schema",
+    "As user fills form, payload state updates in App.jsx",
+    "LivePayloadTerminal reactively displays the complete HTTP request with syntax highlighting",
+    "User can copy the final request to use in their own code/tools"
+  ],
+  "keyFiles": [
+    {
+      "file": "src/App.jsx",
+      "reason": "Core application logic: manages all state, handles n8n webhook communication, implements JSON repair fallback, and coordinates all child components"
+    },
+    {
+      "file": "src/components/DynamicFormBuilder.jsx",
+      "reason": "Renders dynamic forms from AI-generated schema; handles all field types (text, number, boolean, enum, textarea) and categorizes them into headers/path/query/body"
+    },
+    {
+      "file": "src/components/LivePayloadTerminal.jsx",
+      "reason": "Builds and displays the final HTTP request with custom syntax highlighting; shows exactly what the API call would look like"
+    },
+    {
+      "file": "README.md",
+      "reason": "Explains the entire workflow, tech stack, and how n8n/Firecrawl/vLLM integrate (critical for understanding the backend)"
+    },
+    {
+      "file": "package.json",
+      "reason": "Shows the minimal dependency footprint (React, Vite, Tailwind, jsonrepair) and available npm scripts"
+    }
+  ],
+  "entryPoints": {
+    "add_new_field_type": "Modify DynamicFormBuilder.jsx's renderField() function to handle new input types",
+    "change_ai_processing": "Update the n8n webhook URL in App.jsx (VITE_N8N_WEBHOOK_URL env var) or modify the n8n workflow itself",
+    "add_request_execution": "Extend LivePayloadTerminal.jsx to add a 'Send Request' button that actually executes the HTTP call",
+    "improve_error_handling": "Enhance App.jsx's handleScan() catch block and add more specific error messages",
+    "customize_styling": "Modify Tailwind classes in components or update tailwind.config.js for theme changes",
+    "add_authentication": "Add auth fields to DynamicFormBuilder and include them in LivePayloadTerminal's request building logic"
+  },
+  "gotchas": [
+    "The app has complex JSON repair logic in App.jsx because the AI sometimes returns malformed JSON or wraps it in markdown code blocks. It tries standard JSON.parse first, then jsonrepair, then searches for nested 'raw' error objects from n8n.",
+    "The payload state is categorized into 4 objects (headers, pathParams, queryParams, body) rather than a flat structure. When updating payload, you must specify the category: onPayloadChange(category, field, value).",
+    "The n8n webhook has a 2-minute timeout, so if documentation is too large or AI processing takes too long, the request will fail. There's no retry mechanism built in.",
+    "LivePayloadTerminal uses custom Unicode markers (\\uE000 and \\uE001) as temporary tokens for syntax highlighting dynamic values, which are then converted to HTML spans. Don't use these characters in actual data.",
+    "The EndpointSelector component has a toggle behavior: clicking the selected endpoint expands/collapses the full list, while clicking a different endpoint selects it and collapses the list. This isn't immediately obvious from the UI."
+  ],
+  "dependencies": {
+    "external_services": [
+      "n8n webhook (configured via VITE_N8N_WEBHOOK_URL env var) - orchestrates the backend workflow",
+      "Firecrawl API - scrapes API documentation pages",
+      "vLLM server running GPT-OSS-20B on AMD MI300X GPU - AI inference for parsing docs"
+    ],
+    "npm_packages": {
+      "react": "^19.2.5 - UI framework",
+      "react-dom": "^19.2.5 - React DOM rendering",
+      "jsonrepair": "^3.14.0 - Repairs malformed JSON from AI responses",
+      "vite": "^8.0.10 - Build tool and dev server",
+      "tailwindcss": "^4.2.4 - Utility-first CSS framework",
+      "eslint": "^10.2.1 - Code linting"
+    },
+    "runtime_requirements": [
+      "Node.js environment for development",
+      "Environment variable VITE_N8N_WEBHOOK_URL must be set to point to the n8n webhook endpoint"
+    ]
+  }
+}
