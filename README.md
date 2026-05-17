@@ -1,12 +1,10 @@
-# amneAI — Your Codebase, Explained.
-
-### A cure for codebase amnesia.
+# amneAI — The Cure for Codebase Amnesia
 
 **Built for IBM Bob Hackathon 2026 at lablab.ai**
 
-> _"I built a website with AI. It works perfectly. But when my friend asked me to modify it — I couldn't explain my own code."_
+> _"Built for the person who needs to understand your code the most... You."_
 
-amneAI turns any GitHub repository into a structured, plain-English codebase guide — so you actually understand what's in your code.
+amneAI turns any GitHub repository into a structured, plain-English codebase guide — context for your future self. Pick up where you left off.
 
 ## 🎬 See It In Action
 
@@ -41,11 +39,12 @@ Paste a GitHub URL. Get a 7-section interactive dashboard that explains your cod
 
 **Zero jargon. Instant understanding.**
 
-## 💡 Why amneAI?
+## 💡 The Cognitive Debt Crisis
 
-- **73% of new code is AI-generated** (GitHub, 2025) — developers build faster than they can understand
+- **73% of new code is AI-generated** — developers generate 3x more code than they can manually review
+- **"Vibe coding"** is the fastest-growing trend in software development — we are generating massive amounts of cognitive debt
 - You can't Google something you don't know exists — amneAI asks the right questions for you
-- Unlike chat responses that disappear, amneAI gives you a **persistent, shareable guide**
+- Unlike chat responses that disappear, amneAI gives you a **persistent, shareable guide** for your future self
 
 ## 🏗️ Architecture
 
@@ -94,7 +93,7 @@ Paste a GitHub URL. Get a 7-section interactive dashboard that explains your cod
 2. **Analyze** — IBM Bob Shell reads every file with full context awareness via `bob -p`
 3. **Render** — React dashboard displays the structured codebase guide via SSE streaming
 
-Unlike standard RAG, Bob Shell processes the **entire** repository architecture natively — no chunking, no embedding, no retrieval loss.
+We leverage Bob Shell's **native project context awareness** instead of building a custom RAG pipeline — no chunking, no embedding, no retrieval loss.
 
 ## 🚀 Quick Start
 
@@ -127,6 +126,24 @@ cd amneai
 npm install
 ```
 
+### Authenticate IBM Bob Shell (Required for Live Analysis)
+
+Before running live analysis, you need to authenticate and trust the amneAI workspace so Bob can read cloned repositories in the `tmp/` folder:
+
+```bash
+cd /path/to/amneai
+bob
+```
+
+This will:
+1. Prompt you to authenticate with your **IBMid** via browser
+2. Accept the IBM license agreement
+3. Trust the amneAI project directory
+
+Once complete, close the interactive session (`exit`) and you're ready to run.
+
+### Run amneAI
+
 **Option A: Frontend Only (Pre-cached Examples)**
 ```bash
 npm run dev
@@ -146,7 +163,7 @@ npm run server
 
 ## 🔒 Enterprise Mode — Analyze Private Repos
 
-Enterprise Mode is for users who prioritize **data privacy and security**. Your codebase never leaves your computer — it's only analyzed by IBM Bob's server.
+Enterprise Mode is for users who prioritize **data privacy and security**. Zero proprietary code is ever uploaded to external cloud servers — your codebase stays on your machine, only analyzed by IBM Bob's server.
 
 ### Option 1: Bob Shell (Recommended)
 
@@ -223,7 +240,7 @@ npm run dev:full
 | **AI Engine** | IBM Bob Shell (`bob -p` — full repo context analysis) |
 | **Built With** | IBM Bob IDE (Enterprise Plan) |
 
-> **Note:** All code for this project was written using IBM Bob IDE during the hackathon. Bob task session reports are included in the `bob_sessions/` directory.
+> **"Made of Bob, by Bob, for Bob."** The entire application was written, debugged, and orchestrated using IBM Bob IDE. IBM Bob Shell acts as the core analytical engine. Built specifically for the IBM Bob Hackathon to showcase how Bob's deep context-awareness can solve codebase amnesia.
 
 ## 📊 Pre-cached Examples
 
@@ -268,10 +285,19 @@ NODE_ENV=development
 **IBM Bob Hackathon 2026 — lablab.ai**
 
 ### The Problem
-AI lets anyone build software. AI doesn't help you **understand** what you built. The gap between what we build and what we understand is growing every day.
+AI lets anyone build software. AI doesn't help you **understand** what you built. Developers generate 3x more code than they can manually review. We are generating massive amounts of cognitive debt — and the gap between what we build and what we understand is growing every day.
 
 ### The Solution
-amneAI uses IBM Bob Shell to analyze entire repositories with full context awareness and generate structured, plain-English codebase guides — so developers can recover understanding of code they've lost context on.
+amneAI uses IBM Bob Shell to analyze entire repositories with full context awareness and generate structured, plain-English codebase guides — context for your future self, so you can pick up where you left off.
+
+### Who Needs This?
+
+| Audience | The Value |
+|----------|----------|
+| **Solo Builders** | Rescuing dead and mostly forgotten projects built rapidly with AI |
+| **Growing Teams** | Instant structural ramp-up when a new developer joins the codebase |
+| **Project Handoffs** | Freelancer wrote the code. Client has to maintain it. New team can pick it up |
+| **Engineering Teams** | Get to code faster. Enterprise Mode ensures proprietary data never leaves the machine |
 
 ### IBM Bob Usage
 - **IBM Bob IDE** — Used to write, debug, and orchestrate the entire application
@@ -282,7 +308,7 @@ amneAI uses IBM Bob Shell to analyze entire repositories with full context aware
 - ✅ 7 comprehensive analysis sections in plain English
 - ✅ Real-time SSE streaming with live terminal output
 - ✅ Pre-cached examples for instant demonstration
-- ✅ Beautiful, animated dark-theme dashboard
+- ✅ Enterprise Mode for private/proprietary codebases
 
 ## 📝 License
 
@@ -292,8 +318,8 @@ MIT License
 
 **Randy Faraday** — [@ranfarrr](https://github.com/ranfarrr)
 
-Built solo in 48 hours. Powered by IBM Bob.
+Built solo in 48 hours. Made of Bob, by Bob, for Bob.
 
 ---
 
-**Made with ❤️ using IBM Bob IDE + IBM Bob Shell**
+**The person who most needs to understand your code... is you.**
