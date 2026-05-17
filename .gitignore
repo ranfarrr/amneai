@@ -41,4 +41,7 @@ coverage/
 *.bak
 *.tmp
 
+# Project context (AI-only, not for repo)
+project.md
+
 # Made with Bob

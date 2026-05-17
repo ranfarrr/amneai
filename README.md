@@ -1,72 +1,49 @@
-# amneAI - AI-Powered Codebase Onboarding Tool
+# amneAI — Your Codebase, Explained.
 
-**Built for IBM BOB Hackathon 2026 at lablab.ai**
+**Built for IBM Bob Hackathon 2026 at lablab.ai**
 
-Transform GitHub repositories into beautiful, interactive onboarding dashboards using Bob Shell AI analysis.
+> _"I built a website with AI. It works perfectly. But when my friend asked me to modify it — I couldn't explain my own code."_
 
-![amneAI Demo](https://via.placeholder.com/800x400?text=amneAI+Demo)
+amneAI turns any GitHub repository into a structured, plain-English codebase guide — so you actually understand what's in your code.
+
+## 🎬 See It In Action
+
+**1. Paste any GitHub URL**
+![Landing Page](screenshots/01-landing.jpg)
+
+**2. Watch IBM Bob Shell analyze the entire repo in real-time**
+![Analysis Terminal](screenshots/02-terminal.jpg)
+
+**3. Get a structured, interactive codebase guide**
+![Summary & Architecture](screenshots/03-summary.jpg)
+
+![Key Files & Entry Points](screenshots/04-key-files.jpg)
+
+![Gotchas & Dependencies](screenshots/05-gotchas.jpg)
+
+---
 
 ## 🎯 What is amneAI?
 
-amneAI helps developers understand new codebases quickly by providing:
-- **Summary** - Quick overview of what the project does
-- **Architecture** - Frontend/Backend breakdown with technologies
-- **Data Flow** - Step-by-step user/data flow visualization
-- **Key Files** - 5 most important files with explanations
-- **Entry Points** - Where to start for common tasks
-- **Gotchas** - Security concerns, technical debt, and pitfalls
-- **Dependencies** - External services, packages, and requirements
+Paste a GitHub URL. Get a 7-section interactive dashboard that explains your codebase in human-readable language:
 
-## 🚀 Quick Start
+| Section | What You Learn |
+|---------|---------------|
+| 📋 **Summary** | What does this app actually do? |
+| 🏗️ **Architecture** | What are the main parts and how do they connect? |
+| 🔀 **Data Flow** | How does information move through the app? |
+| 📖 **Key Files** | Which files should I read first? |
+| 🚀 **Entry Points** | I want to add a feature — where do I start? |
+| ⚠️ **Gotchas** | What will confuse me? (And why it exists) |
+| 🔌 **Dependencies** | What does this app need to run? |
 
-### Prerequisites
-- Node.js 18+ 
-- npm or yarn
-- Bob Shell (for live analysis)
+**Zero jargon. Instant understanding.**
 
-### Installation
+## 💡 Why amneAI?
 
-1. **Clone the repository**
-```bash
-git clone https://github.com/ranfarrr/amneai
-cd amneai
-```
-
-2. **Install dependencies**
-```bash
-npm install
-```
-
-3. **Run the application**
-
-**Option A: Frontend Only (Pre-cached Examples)**
-```bash
-npm run dev
-```
-Visit http://localhost:3000
-
-**Option B: Full Stack (Live Analysis)**
-```bash
-# Terminal 1: Start frontend
-npm run dev
-
-# Terminal 2: Start backend
-npm run server
-```
-
-## 📊 Deployment Modes
-
-### Mode 1: Production (Deployed Site)
-- ✅ Pre-cached JSON files for instant demo
-- ✅ Zero backend - Pure static site
-- ✅ Enterprise Modal for custom URLs
-- 🌐 Deployed on Vercel/Netlify
-
-### Mode 2: Local Demo (Video Recording)
-- ✅ Express backend with Bob Shell integration
-- ✅ Live repository analysis
-- ✅ Git clone + AI analysis workflow
-- 🎥 Perfect for demo videos
+- **73% of new code is AI-generated** (GitHub, 2025) — developers build faster than they can understand
+- You can't Google something you don't know exists — amneAI asks the right questions for you
+- Unlike chat responses that disappear, amneAI gives you a **persistent, shareable guide**
 
 ## 🏗️ Architecture
 
@@ -74,14 +51,6 @@ npm run server
 ┌─────────────────────────────────────────────────────────┐
 │                     User Interface                       │
 │  (React 19 + Vite 8 + Tailwind CSS 4 + Lucide Icons)   │
-└─────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│                   Frontend Logic                         │
-│  • RepoInput Component (URL + Dropdown)                 │
-│  • Environment Detection (Prod vs Local)                │
-│  • Pre-cached Data (3 repositories)                     │
 └─────────────────────────────────────────────────────────┘
                            │
                            ▼
@@ -106,8 +75,8 @@ npm run server
               │                         │
               │                         ▼
               │              ┌─────────────────┐
-              │              │  Bob Shell AI   │
-              │              │  Analysis       │
+              │              │  IBM Bob Shell  │
+              │              │  (bob -p)       │
               │              └─────────────────┘
               │                         │
               └─────────────┬───────────┘
@@ -118,19 +87,61 @@ npm run server
               └─────────────────────────┘
 ```
 
+**How it works:**
+1. **Clone** — Express backend clones the GitHub repository
+2. **Analyze** — IBM Bob Shell reads every file with full context awareness via `bob -p`
+3. **Render** — React dashboard displays the structured codebase guide via SSE streaming
+
+Unlike standard RAG, Bob Shell processes the **entire** repository architecture natively — no chunking, no embedding, no retrieval loss.
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm
+- IBM Bob Shell (for live analysis)
+
+### Installation
+
+```bash
+git clone https://github.com/ranfarrr/amneai.git
+cd amneai
+npm install
+```
+
+**Option A: Frontend Only (Pre-cached Examples)**
+```bash
+npm run dev
+```
+Visit http://localhost:3000
+
+**Option B: Full Stack (Live Analysis)**
+```bash
+# Terminal 1: Start frontend
+npm run dev
+
+# Terminal 2: Start backend
+npm run server
+```
+
 ## 🎨 Tech Stack
 
-### Frontend
-- **React 19** - Latest React with concurrent features
-- **Vite 8** - Lightning-fast build tool
-- **Tailwind CSS 4** - Utility-first CSS framework
-- **Lucide Icons** - Beautiful, consistent icons
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | React 19 + Vite 8 + Tailwind CSS 4 + Lucide Icons |
+| **Backend** | Express.js + Server-Sent Events (SSE) |
+| **AI Engine** | IBM Bob Shell (`bob -p` — full repo context analysis) |
+| **Built With** | IBM Bob IDE (Enterprise Plan) |
 
-### Backend (Local Only)
-- **Express.js** - Minimal web framework
-- **Bob Shell** - IBM's AI coding assistant
-- **fs-extra** - Enhanced file system operations
-- **CORS** - Cross-origin resource sharing
+> **Note:** All code for this project was written using IBM Bob IDE during the hackathon. Bob task session reports are included in the `bob_sessions/` directory.
+
+## 📊 Pre-cached Examples
+
+| Project | Stack | Repository |
+|---------|-------|-----------|
+| **APIlot** | React + Vite + n8n + Firecrawl + vLLM | [ranfarrr/APIlot-Inteligent-API-Navigator](https://github.com/ranfarrr/APIlot-Inteligent-API-Navigator) |
+| **Interactive TOEIC Learner** | React 18 + Vite + Tailwind | [ranfarrr/interactive-toeic-learner](https://github.com/ranfarrr/interactive-toeic-learner) |
+| **Galaxium Travels** | FastAPI + React + TypeScript + SQLite | [IBM/galaxium-travels](https://github.com/IBM/galaxium-travels) |
 
 ## 📁 Project Structure
 
@@ -138,139 +149,61 @@ npm run server
 amneai/
 ├── src/
 │   ├── components/
-│   │   ├── layout/
-│   │   │   └── Header.jsx
-│   │   ├── cards/
-│   │   │   ├── BaseCard.jsx
-│   │   │   ├── SummaryCard.jsx
-│   │   │   ├── ArchitectureCard.jsx
-│   │   │   ├── DataFlowCard.jsx
-│   │   │   ├── KeyFilesCard.jsx
-│   │   │   ├── EntryPointsCard.jsx
-│   │   │   ├── GotchasCard.jsx
-│   │   │   └── DependenciesCard.jsx
-│   │   ├── modals/
-│   │   │   └── EnterpriseModal.jsx
-│   │   └── RepoInput.jsx
-│   ├── data/
-│   │   ├── apilot.json
-│   │   ├── toeic-learner.json
-│   │   ├── galaxium-travels.json
-│   │   └── index.js
-│   ├── hooks/
-│   │   └── useEnvironment.js
+│   │   ├── layout/Header.jsx
+│   │   ├── cards/          # 7 analysis section cards
+│   │   ├── modals/EnterpriseModal.jsx
+│   │   ├── RepoInput.jsx
+│   │   └── TerminalDisplay.jsx
+│   ├── data/               # Pre-cached analysis JSONs
+│   ├── hooks/useEnvironment.js
 │   ├── utils/
-│   │   └── validation.js
 │   ├── App.jsx
-│   ├── main.jsx
 │   └── index.css
-├── server.js
-├── package.json
-├── vite.config.js
-├── tailwind.config.js
-└── README.md
+├── server.js               # Express backend + Bob Shell integration
+├── bob_sessions/           # IBM Bob task reports (required for judging)
+└── package.json
 ```
 
-## 🔧 Configuration
+## 🔧 Environment Variables
 
-### Environment Variables
-
-**Frontend (.env)**
 ```env
-VITE_API_URL=http://localhost:3001
-```
-
-**Backend (.env)**
-```env
+# Backend (.env)
 PORT=3001
 CORS_ORIGINS=http://localhost:3000
 NODE_ENV=development
 ```
 
-## 🎯 Pre-cached Examples
-
-1. **APIlot** - AI-powered API documentation navigator
-   - Tech: React + Vite + n8n + Firecrawl + vLLM
-   - URL: https://github.com/ranfarrr/APIlot-Inteligent-API-Navigator
-
-2. **Interactive TOEIC Learner** - 3-phase progressive learning platform
-   - Tech: React 18 + Vite + Tailwind
-   - URL: https://github.com/ranfarrr/interactive-toeic-learner
-
-3. **Galaxium Travels** - Interplanetary flight booking system (IBM Demo)
-   - Tech: FastAPI + React + TypeScript + SQLite
-   - URL: https://github.com/IBM/galaxium-travels
-
-## 🚀 Deployment
-
-### Deploy to Vercel (Recommended)
-
-1. **Build the project**
-```bash
-npm run build
-```
-
-2. **Deploy to Vercel**
-```bash
-npx vercel
-```
-
-3. **Configure environment**
-- Set `NODE_ENV=production`
-- No backend needed (static site)
-
-### Deploy to Netlify
-
-1. **Build the project**
-```bash
-npm run build
-```
-
-2. **Deploy**
-```bash
-npx netlify deploy --prod --dir=dist
-```
-
-## 🎬 Demo Video
-
-[Link to demo video will be added]
-
 ## 🏆 Hackathon Submission
 
-**IBM BOB Hackathon 2026 at lablab.ai**
+**IBM Bob Hackathon 2026 — lablab.ai**
 
-### Problem Statement
-Developers waste hours understanding new codebases, leading to:
-- Slow onboarding for new team members
-- Difficulty maintaining legacy code
-- Security vulnerabilities from misunderstanding architecture
+### The Problem
+AI lets anyone build software. AI doesn't help you **understand** what you built. The gap between what we build and what we understand is growing every day.
 
-### Solution
-amneAI uses Bob Shell AI to automatically analyze repositories and generate beautiful, interactive onboarding dashboards that help developers understand codebases 10x faster.
+### The Solution
+amneAI uses IBM Bob Shell to analyze entire repositories with full context awareness and generate structured, plain-English codebase guides — so developers can recover understanding of code they've lost context on.
+
+### IBM Bob Usage
+- **IBM Bob IDE** — Used to write, debug, and orchestrate the entire application
+- **IBM Bob Shell** — Powers the backend analysis engine (`bob -p`) that reads repositories
 
 ### Key Features
-- ✅ Instant analysis of GitHub repositories
-- ✅ Beautiful, animated UI with dark theme
-- ✅ 7 comprehensive analysis sections
-- ✅ Pre-cached examples for instant demo
-- ✅ Enterprise-ready with local installation option
+- ✅ Instant codebase analysis of any GitHub repository
+- ✅ 7 comprehensive analysis sections in plain English
+- ✅ Real-time SSE streaming with live terminal output
+- ✅ Pre-cached examples for instant demonstration
+- ✅ Beautiful, animated dark-theme dashboard
 
 ## 📝 License
 
-MIT License - See LICENSE file for details
+MIT License
 
 ## 👨‍💻 Author
 
-**Randy Faraday**
-- GitHub: [@ranfarrr](https://github.com/ranfarrr)
-- Project: Built for IBM BOB Hackathon 2026
+**Randy Faraday** — [@ranfarrr](https://github.com/ranfarrr)
 
-## 🙏 Acknowledgments
-
-- IBM for Bob Shell and the hackathon opportunity
-- lablab.ai for hosting the event
-- The open-source community for amazing tools
+Built solo in 48 hours. Powered by IBM Bob.
 
 ---
 
-**Made with ❤️ and Bob Shell**
+**Made with ❤️ using IBM Bob IDE + IBM Bob Shell**
