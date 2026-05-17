@@ -225,14 +225,15 @@ function App() {
     <div className="min-h-screen bg-slate-900">
       <Header onEnterpriseClick={() => setIsModalOpen(true)} />
       
+      <EnterpriseModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
       <main className="container mx-auto px-4 py-8">
         {!showResults && !selectedRepo ? (
           <>
             <RepoInput onAnalyze={handleAnalyze} />
-            <EnterpriseModal
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-            />
             
             {(isLoading || analysisComplete) && (
               <>

@@ -1,5 +1,7 @@
 # amneAI — Your Codebase, Explained.
 
+### A cure for codebase amnesia.
+
 **Built for IBM Bob Hackathon 2026 at lablab.ai**
 
 > _"I built a website with AI. It works perfectly. But when my friend asked me to modify it — I couldn't explain my own code."_
@@ -97,11 +99,27 @@ Unlike standard RAG, Bob Shell processes the **entire** repository architecture 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- npm
-- IBM Bob Shell (for live analysis)
+- **Node.js 18+** — for running the amneAI app
+- **npm**
+- **IBM Bob Shell** — for live repo analysis (requires **Node.js 22.15.0+**)
 
-### Installation
+> ⚠️ **Note:** IBM Bob Shell requires **Node.js 22.15.0 or later**, which is higher than the app's own requirement. Make sure your Node.js version satisfies Bob Shell's minimum.
+
+### Install IBM Bob Shell
+
+**macOS / Linux:**
+```bash
+curl -fsSL https://bob.ibm.com/download/bobshell.sh | bash
+```
+
+**Windows:**
+```powershell
+powershell -ep Bypass 'irm -Uri "https://bob.ibm.com/download/bobshell.ps1" | iex'
+```
+
+After installation, authenticate with your IBMid when prompted.
+
+### Install amneAI
 
 ```bash
 git clone https://github.com/ranfarrr/amneai.git
@@ -123,6 +141,78 @@ npm run dev
 # Terminal 2: Start backend
 npm run server
 ```
+
+---
+
+## 🔒 Enterprise Mode — Analyze Private Repos
+
+Enterprise Mode is for users who prioritize **data privacy and security**. Your codebase never leaves your computer — it's only analyzed by IBM Bob's server.
+
+### Option 1: Bob Shell (Recommended)
+
+Your code stays on your machine. Only the analysis request goes to IBM Bob.
+
+**Step 1 — Navigate to your repo:**
+```bash
+cd /path/to/your/repository
+```
+
+**Step 2 — Run the analysis:**
+```bash
+bob -p "Analyze this codebase and provide a comprehensive codebase guide.
+Return ONLY a valid JSON object with no additional text, markdown fences, or explanation.
+
+Required structure:
+{
+  \"metadata\": {
+    \"repoName\": \"repository name\",
+    \"repoUrl\": \"github url or local path\",
+    \"analyzedAt\": \"ISO timestamp\",
+    \"language\": \"primary language\",
+    \"framework\": \"main framework\"
+  },
+  \"summary\": \"1-2 sentence description of what this project does\",
+  \"architecture\": {
+    \"frontend\": { \"description\": \"...\", \"technologies\": [] },
+    \"backend\": { \"description\": \"...\", \"technologies\": [] }
+  },
+  \"dataFlow\": [\"step 1: user action\", \"step 2: system response\", \"step 3: data processing\"],
+  \"keyFiles\": [
+    { \"file\": \"path/to/file\", \"reason\": \"why this file is important\" }
+  ],
+  \"entryPoints\": {
+    \"add_feature\": \"where to start when adding a feature\",
+    \"fix_bug\": \"where to start when fixing a bug\",
+    \"understand_flow\": \"where to start to understand the application flow\"
+  },
+  \"gotchas\": [\"pitfall 1\", \"pitfall 2\", \"confusing aspect 3\"],
+  \"dependencies\": {
+    \"external_services\": [\"service1\", \"service2\"],
+    \"npm_packages\": { \"package\": \"purpose\" },
+    \"runtime_requirements\": [\"Node.js 18+\", \"etc\"]
+  }
+}
+
+Include exactly 5 keyFiles. Focus on helping developers understand the codebase quickly.
+Pay special attention to the gotchas section - include security concerns, technical debt, and confusing patterns." > analysis.json
+```
+
+This generates an `analysis.json` file in your repository that matches amneAI's dashboard format.
+
+### Option 2: Run amneAI Locally
+
+For the full experience with live analysis and the interactive dashboard:
+
+```bash
+git clone https://github.com/ranfarrr/amneai
+cd amneai
+npm install
+npm run dev:full
+```
+
+> 📌 **Coming soon:** JSON upload feature so you can view any `analysis.json` in the amneAI dashboard without a backend.
+
+---
 
 ## 🎨 Tech Stack
 
